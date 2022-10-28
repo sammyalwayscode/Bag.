@@ -108,7 +108,7 @@ const LineSpace = styled.div`
   height: 1px;
   width: 60px;
   background-color: #000;
-  margin: 0 25px;
+  margin: 0 20px;
 `;
 const Price = styled.div`
   small {
