@@ -49,13 +49,13 @@ const Container = styled.div`
   flex-direction: column;
   font-family: montserrat;
   small {
-    font-size: 10px;
+    font-size: 8px;
     margin-bottom: 10px;
   }
 `;
 const Wrapper = styled.div`
   width: 85%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
