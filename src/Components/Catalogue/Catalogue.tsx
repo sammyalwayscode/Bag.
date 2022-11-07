@@ -4,56 +4,56 @@ const Catalogue = () => {
   const productData = [
     {
       id: "1",
-      brand: "/image/pedro.svg",
+      brand: "pedro",
       bagImg: "/image/pop1.png",
       productName: "Top Handle Leather",
       price: "250",
     },
     {
       id: "2",
-      brand: "/image/dior1.png",
+      brand: "dior",
       bagImg: "/image/pop2.png",
       productName: "Medium Lady Bag",
       price: "4,500",
     },
     {
       id: "3",
-      brand: "/image/pedro.svg",
+      brand: "pedro",
       bagImg: "/image/pop3.png",
       productName: "Lizard-Effect Leather",
       price: "130",
     },
     {
       id: "4",
-      brand: "/image/charles1.png",
+      brand: "charles & Keith",
       bagImg: "/image/pop4.png",
       productName: "Double Handle Front",
       price: "600",
     },
     {
       id: "5",
-      brand: "/image/stradivarius1.png",
+      brand: "stradivarus",
       bagImg: "/image/pop6.png",
       productName: "Structured Tote Bag",
       price: "220",
     },
     {
       id: "6",
-      brand: "/image/dior1.png",
+      brand: "dior",
       bagImg: "/image/pop6.png",
       productName: "Small Book Tote",
       price: "3,200",
     },
     {
       id: "7",
-      brand: "/image/stradivarius1.png",
+      brand: "stradivarus",
       bagImg: "/image/pop7.png",
       productName: "Multikompartemen Sling Bag",
       price: "180",
     },
     {
       id: "8",
-      brand: "/image/zara1.png",
+      brand: "zara",
       bagImg: "/image/pop8.png",
       productName: "Soft Sling Chain Bag",
       price: "175",
@@ -104,7 +104,7 @@ const Catalogue = () => {
             <BagCard>
               <ImgPart>
                 <LogoImg>
-                  <img src={props.brand} alt="" />
+                  <small> {props.brand} </small>
                 </LogoImg>
                 <BagImage>
                   <img src={props.bagImg} alt="" />
@@ -227,14 +227,17 @@ const ImgPart = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: space-around; */
   margin-bottom: 15px;
 `;
 const LogoImg = styled.div`
   height: 35px;
-  margin-bottom: 20px;
-  img {
-    width: 50px;
+  margin: 20px 0;
+  small {
+    font-weight: 300;
+    letter-spacing: 5px;
+    font-size: 10px;
+    font-family: poppins;
   }
 `;
 const BagImage = styled.div``;

@@ -6,12 +6,7 @@ const DetailPage = () => {
     <Container>
       <Wrapper>
         <ImageDiv>
-          <BrandLogo>
-            <img src="/image/dior1.png" alt="" />
-          </BrandLogo>
-          <BagImg>
-            <img src="/image/pop6.png" alt="" />
-          </BagImg>
+          <img src="/image/buc.jpg" alt="" />
         </ImageDiv>
         <TextDiv>
           <BagName>Top Handle Leather</BagName>
@@ -62,6 +57,7 @@ const Wrapper = styled.div`
 `;
 const ImageDiv = styled.div`
   width: 500px;
+  height: 80vh;
   background-color: #fbf9fb;
   display: flex;
   flex-direction: column;
@@ -70,16 +66,15 @@ const ImageDiv = styled.div`
   border-radius: 7px;
 
   @media (max-width: 500px) {
-    width: 90%;
+    width: 100%;
   }
-`;
-const BrandLogo = styled.div`
-  margin-bottom: 50px;
+
   img {
-    width: 80px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
   }
 `;
-const BagImg = styled.div``;
 const TextDiv = styled.div`
   width: 500px;
   @media (max-width: 500px) {

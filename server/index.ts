@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import productsRouter from "./router/productRouter";
+import detailRouter from "./router/detailRouter";
 require("./config/db");
 
 const PORT: number = 3002;
@@ -11,7 +12,8 @@ app.get("/", (req: Request, res: Response): Response => {
 });
 
 app.use("/api/products", productsRouter);
+app.use("/api/detail", detailRouter);
 
 app.listen(PORT, () => {
-  console.log(`Listening On PORT: ${PORT}`);
+  console.log(`Listening on PORT.: ${PORT}`);
 });

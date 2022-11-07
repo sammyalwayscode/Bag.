@@ -6,7 +6,9 @@ interface productDetail {
   productDesription2: string;
   price: number;
   avatar: string;
+  avatarID: string;
   descAvatar: string;
+  descAvatarID: string;
   brandName: string;
   bagType: string;
   bagColor: string;
@@ -30,7 +32,13 @@ const productDetailModel = new mongoose.Schema({
   avatar: {
     type: String,
   },
+  avatarID: {
+    type: String,
+  },
   descAvatar: {
+    type: String,
+  },
+  descAvatarID: {
     type: String,
   },
   brandName: {
