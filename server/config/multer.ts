@@ -29,10 +29,11 @@ const storage = multer.diskStorage({
 //File Validation
 
 const upload = multer({ storage: storage }).single("avatar");
+const uploadDetail = multer({ storage: storage }).single("descAvatar");
 
 // const cpUpload = upload.fields([{ name: "avatar" }, { name: "descAvatar" }]);
 
-export default upload;
+export { upload, uploadDetail };
 
 // const storage = multer.diskStorage({
 //   destination: function (req: Request, _file: any, cb: any) {
