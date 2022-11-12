@@ -35,12 +35,39 @@ const Cart = () => {
             </TopButtom>
           </CardHold>
         </CartCard>
+        <PriceCheckOut>
+          <h6>
+            Total Item Purchased: <strong>20</strong>
+          </h6>
+          <h3>Total Price: $400.92</h3>
+          <button>Proceed To CheckOut</button>
+        </PriceCheckOut>
       </Wrapper>
     </Container>
   );
 };
 
 export default Cart;
+
+const PriceCheckOut = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h3 {
+    margin-top: -10px;
+  }
+  button {
+    width: 90%;
+    height: 35px;
+    background-color: darkorange;
+    border: none;
+    outline: none;
+    font-family: montserrat;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+  }
+`;
 
 const Container = styled.div`
   width: 100%;
