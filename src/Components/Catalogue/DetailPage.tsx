@@ -1,39 +1,100 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../Global/ReduxState";
+import Swal from "sweetalert2";
+import DetailSkleton from "../CardSkeleton/DetailSkleton";
 
 const DetailPage = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const [productDetails, setProductDetails] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const getProductDetail = async () => {
+    const URL = `https://bag-server.vercel.app/api/detail/${id}`;
+
+    await axios.get(URL).then((res) => {
+      setProductDetails(res.data.data.productDetail);
+      console.log(res.data.data.productDetail);
+      setIsLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    getProductDetail();
+  }, []);
+
   return (
     <Container>
-      <Wrapper>
-        <ImageDiv>
-          <img src="/image/buc.jpg" alt="" />
-        </ImageDiv>
-        <TextDiv>
-          <BagName>Top Handle Leather</BagName>
-          <Price>$250.00</Price>
-          <Description1>
-            Mobile app development is the act or process by which a mobile app
-            is developed for mobile devices, such as personal digital
-            assistants, enterprise digital assistants or mobile phones. These
-            applications can be pre-installed on phones during manufacturing
-            platforms
-          </Description1>
-          <Description2>
-            As part of the development process, mobile user interface (UI)
-            design is also essential in the creation of mobile apps. Mobile UI
-            considers constraints, contexts, screen, input, and mobility as
-            outlines for design.
-          </Description2>
-          <AddCart>
-            <button>Add to Cart</button>
-          </AddCart>
-        </TextDiv>
-      </Wrapper>
+      {isLoading && <DetailSkleton />}
+
+      {productDetails?.map((props) => (
+        <Wrapper key={props._id}>
+          <ImageDiv>
+            <img src={props.descAvatar} alt="" />
+          </ImageDiv>
+          <TextDiv>
+            <small> {props.brandName} </small>
+            <BagName> {props.productName} </BagName>
+            <BagPropHold>
+              <Price>
+                {" "}
+                Price: <strong>$ {props.price} </strong>{" "}
+              </Price>
+              <Price>
+                {" "}
+                Bag Type: <strong> {props.bagType} </strong>{" "}
+              </Price>
+              <Price>
+                {" "}
+                Color:{" "}
+                <strong>
+                  {props.bagColor}{" "}
+                  <ColBox style={{ backgroundColor: `${props.bagColor}` }} />{" "}
+                </strong>{" "}
+              </Price>
+            </BagPropHold>
+            <Description1>{props.productDesription1}</Description1>
+            <Description2>{props.productDesription2}</Description2>
+            <AddCart>
+              <button
+                onClick={() => {
+                  dispatch(addToCart(props));
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Great! 👏👏👏",
+                    text: `${props.productName} Has Been Added to Your BAG.`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                }}
+              >
+                Add to Cart
+              </button>
+            </AddCart>
+          </TextDiv>
+        </Wrapper>
+      ))}
     </Container>
   );
 };
 
 export default DetailPage;
+
+const ColBox = styled.div`
+  height: 12px;
+  width: 12px;
+  margin-left: 3px;
+`;
+
+const BagPropHold = styled.div`
+  display: flex;
+  font-family: poppins;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -51,7 +112,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   @media (max-width: 500px) {
-    width: 90%;
+    width: 100%;
     justify-content: center;
   }
 `;
@@ -77,10 +138,20 @@ const ImageDiv = styled.div`
 `;
 const TextDiv = styled.div`
   width: 500px;
+
+  small {
+    font-weight: 700;
+    font-family: poppins;
+    letter-spacing: 8px;
+    color: darkorange;
+  }
   @media (max-width: 500px) {
     width: 90%;
     text-align: center;
     margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 const BagName = styled.div`
@@ -93,8 +164,14 @@ const BagName = styled.div`
 `;
 const Price = styled.div`
   font-size: 15px;
-  font-weight: bold;
-  color: darkorange;
+  margin: 5px 5px;
+  text-align: center;
+  strong {
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+  }
 `;
 const Description1 = styled.p`
   font-size: 15px;

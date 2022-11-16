@@ -5,9 +5,12 @@ import { BsCart2, BsBagCheckFill, BsBagXFill } from "react-icons/bs";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import SideBar from "./SideBar";
+import { useSelector } from "react-redux";
 
 const Header: React.FC = () => {
   const [toggle, setToggle] = useState<boolean>(false);
+
+  const getQty = useSelector((state: any) => state.QTY);
 
   const toggleSwitch = () => {
     setToggle(!toggle);
@@ -44,7 +47,7 @@ const Header: React.FC = () => {
             >
               <CartDiv>
                 <BsCart2 />
-                <Num>20</Num>
+                <Num> {getQty} </Num>
               </CartDiv>
             </NavLink>
             <span>

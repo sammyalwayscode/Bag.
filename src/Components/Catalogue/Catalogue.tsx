@@ -1,64 +1,86 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import CardSkleton from "../CardSkeleton/CardSkleton";
 
-const Catalogue = () => {
-  const productData = [
-    {
-      id: "1",
-      brand: "pedro",
-      bagImg: "/image/pop1.png",
-      productName: "Top Handle Leather",
-      price: "250",
-    },
-    {
-      id: "2",
-      brand: "dior",
-      bagImg: "/image/pop2.png",
-      productName: "Medium Lady Bag",
-      price: "4,500",
-    },
-    {
-      id: "3",
-      brand: "pedro",
-      bagImg: "/image/pop3.png",
-      productName: "Lizard-Effect Leather",
-      price: "130",
-    },
-    {
-      id: "4",
-      brand: "charles & Keith",
-      bagImg: "/image/pop4.png",
-      productName: "Double Handle Front",
-      price: "600",
-    },
-    {
-      id: "5",
-      brand: "stradivarus",
-      bagImg: "/image/pop6.png",
-      productName: "Structured Tote Bag",
-      price: "220",
-    },
-    {
-      id: "6",
-      brand: "dior",
-      bagImg: "/image/pop6.png",
-      productName: "Small Book Tote",
-      price: "3,200",
-    },
-    {
-      id: "7",
-      brand: "stradivarus",
-      bagImg: "/image/pop7.png",
-      productName: "Multikompartemen Sling Bag",
-      price: "180",
-    },
-    {
-      id: "8",
-      brand: "zara",
-      bagImg: "/image/pop8.png",
-      productName: "Soft Sling Chain Bag",
-      price: "175",
-    },
-  ];
+const Catalogue: React.FC = () => {
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const getProducts = async () => {
+    const URL: string = `https://bag-server.vercel.app/api/products`;
+
+    await axios.get(URL).then((res) => {
+      setProducts(res.data.data);
+      // console.log(res.data.data);
+      setIsLoading(false);
+    });
+  };
+
+  console.log(products);
+  // const productData = [
+  //   {
+  //     id: "1",
+  //     brand: "pedro",
+  //     bagImg: "/image/pop1.png",
+  //     productName: "Top Handle Leather",
+  //     price: "250",
+  //   },
+  //   {
+  //     id: "2",
+  //     brand: "dior",
+  //     bagImg: "/image/pop2.png",
+  //     productName: "Medium Lady Bag",
+  //     price: "4,500",
+  //   },
+  //   {
+  //     id: "3",
+  //     brand: "pedro",
+  //     bagImg: "/image/pop3.png",
+  //     productName: "Lizard-Effect Leather",
+  //     price: "130",
+  //   },
+  //   {
+  //     id: "4",
+  //     brand: "charles & Keith",
+  //     bagImg: "/image/pop4.png",
+  //     productName: "Double Handle Front",
+  //     price: "600",
+  //   },
+  //   {
+  //     id: "5",
+  //     brand: "stradivarus",
+  //     bagImg: "/image/pop6.png",
+  //     productName: "Structured Tote Bag",
+  //     price: "220",
+  //   },
+  //   {
+  //     id: "6",
+  //     brand: "dior",
+  //     bagImg: "/image/pop6.png",
+  //     productName: "Small Book Tote",
+  //     price: "3,200",
+  //   },
+  //   {
+  //     id: "7",
+  //     brand: "stradivarus",
+  //     bagImg: "/image/pop7.png",
+  //     productName: "Multikompartemen Sling Bag",
+  //     price: "180",
+  //   },
+  //   {
+  //     id: "8",
+  //     brand: "zara",
+  //     bagImg: "/image/pop8.png",
+  //     productName: "Soft Sling Chain Bag",
+  //     price: "175",
+  //   },
+  // ];
+
+  useEffect(() => {
+    getProducts();
+  }, []);
   return (
     <Container>
       <Wrapper>
@@ -100,19 +122,27 @@ const Catalogue = () => {
           </BrandSel>
         </PopCategory>
         <BagsDispHold>
-          {productData?.map((props) => (
-            <BagCard>
-              <ImgPart>
-                <LogoImg>
-                  <small> {props.brand} </small>
-                </LogoImg>
-                <BagImage>
-                  <img src={props.bagImg} alt="" />
-                </BagImage>
-              </ImgPart>
-              <ProdName> {props.productName} </ProdName>
-              <ProdPrice>${props.price}.00</ProdPrice>
-            </BagCard>
+          {isLoading && <CardSkleton />}
+
+          {products?.map((props) => (
+            <Link
+              key={props._id}
+              to={`/detail/${props._id}`}
+              style={{ textDecoration: "none", color: "#000" }}
+            >
+              <BagCard key={props._id}>
+                <ImgPart>
+                  <LogoImg>
+                    <small> {props.brandName} </small>
+                  </LogoImg>
+                  <BagImage>
+                    <img src={props.avatar} alt="" />
+                  </BagImage>
+                </ImgPart>
+                <ProdName> {props.productName} </ProdName>
+                <ProdPrice>${props.price}</ProdPrice>
+              </BagCard>
+            </Link>
           ))}
         </BagsDispHold>
       </Wrapper>
@@ -155,6 +185,7 @@ const PopCategory = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 60px;
+  justify-content: center;
 `;
 const AllBtn = styled.button`
   height: 40px;
