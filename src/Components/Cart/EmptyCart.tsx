@@ -6,7 +6,7 @@ const EmptyCart = () => {
     <Container>
       <Wrapper>
         <small>Don't Wait😏</small>
-        <Title>Your Cart is Curently Empty</Title>
+        <Title>Your BAG is Curently Empty</Title>
         <Box>
           {" "}
           <span>Go to the Catalogue to make Purchase</span>{" "}
@@ -43,6 +43,7 @@ const Title = styled.div`
   font-size: 24px;
   font-weight: 800;
   margin-bottom: 20px;
+  text-align: center;
 `;
 const Box = styled.div`
   height: 80px;
@@ -54,4 +55,10 @@ const Box = styled.div`
   font-size: 15px;
   font-weight: lighter;
   letter-spacing: 10px;
+  text-align: center;
+  @media (max-width: 500px) {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 5px;
+  }
 `;

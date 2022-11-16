@@ -1,34 +1,103 @@
 import React from "react";
-import { FiArrowLeftCircle } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { usePaystackPayment } from "react-paystack";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { clearCart, resetPrice, resetQty } from "../Global/ReduxState";
 
 const Paynment = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const getCart = useSelector((state: any) => state.cart);
+  const getTotalPrice = useSelector((state: any) => state.TOTALPRICE);
+  const getPreOdereds = useSelector((state: any) => state.PREORDER);
+  console.log(getTotalPrice.toFixed(2));
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: getPreOdereds.email,
+    amount: parseInt(getTotalPrice.toFixed(2)),
+    publicKey: "pk_test_d632bf4b9aa1e74745eb158cec8034961dc13b18",
+  };
+
+  const onClose = () => {
+    console.log("closed");
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  const onSuccess = () => {
+    console.log("Success");
+    const URL = "https://sam-bag.herokuapp.com/api/order/newOrder";
+    axios
+      .post(URL, {
+        name: getPreOdereds.name,
+        email: getPreOdereds.email,
+        address: getPreOdereds.address,
+        orders: getPreOdereds.orders,
+      })
+      .then((res) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Order Sucessfull",
+          text: "A Message Has Been Sent to Your Email, Please Go and Verify",
+          showConfirmButton: true,
+        }).then(() => {
+          navigate("/catalogue");
+          dispatch(clearCart());
+          dispatch(resetPrice());
+          dispatch(resetQty());
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: error.response.data.message,
+          text: `Please Check and Fix this ERROR`,
+          icon: "error",
+          showConfirmButton: false,
+          timer: 3500,
+        });
+      });
+  };
+
   return (
     <Container>
       <Wrapper>
         <h3>Items Bought</h3>
-        <CartCard>
-          <CardHold>
-            <ImageBox>
-              <img src="/image/pop2.png" alt="" />
-            </ImageBox>
-            <TopButtom>
-              <ProductTitle>Top Handle Leather</ProductTitle>
-              <Buttom>
-                <Price>$250.00</Price>
-              </Buttom>
-            </TopButtom>
-          </CardHold>
-        </CartCard>
+        {getCart?.map((props: any) => (
+          <CartCard key={props._id}>
+            <CardHold>
+              <ImageBox>
+                <img src={props.avatar} alt="" />
+              </ImageBox>
+              <TopButtom>
+                <ProductTitle> {props.productName} </ProductTitle>
+                <Buttom>
+                  <Price>${props.price}</Price>
+                  <Price
+                    style={{
+                      color: "#000",
+                    }}
+                  >
+                    Qty: {props.QTY}
+                  </Price>
+                </Buttom>
+              </TopButtom>
+            </CardHold>
+          </CartCard>
+        ))}
+        <h3>Total Price: ${getTotalPrice.toFixed(2)}</h3>
         <InputPart>
           <SignInputHold>
-            <SignTitle>CheckOut</SignTitle>
-            <SignSubTitle>Please Fill in the details below</SignSubTitle>
+            <SignTitle>Review</SignTitle>
+            <SignSubTitle>These Are The Details Filled</SignSubTitle>
             <InputForm>
-              <InputDiv placeholder="Your Name " />
-              <InputDiv placeholder="Email Address " />
-              <InputDiv placeholder="Home Address" />
+              <InputDiv disabled placeholder={getPreOdereds.name} />
+              <InputDiv disabled placeholder={getPreOdereds.email} />
+              <InputDiv disabled placeholder={getPreOdereds.address} />
             </InputForm>
           </SignInputHold>
         </InputPart>
@@ -37,6 +106,7 @@ const Paynment = () => {
           <small
             style={{
               color: "red",
+              textAlign: "center",
             }}
           >
             This is a Test Payment, Just Click On Success
@@ -48,9 +118,9 @@ const Paynment = () => {
             <PayTextBox>
               <h6>Paystark</h6>
               <PayBox
-                //   onClick={() => {
-                //     initializePayment(onSuccess, onClose);
-                //   }}
+                onClick={() => {
+                  initializePayment(onSuccess, onClose);
+                }}
                 style={{
                   border: "none",
                 }}
@@ -150,8 +220,8 @@ const PayTxt = styled.div`
 
 const PayMeto = styled.div`
   margin: 30px 0;
-  center {
-    margin-bottom: 20px;
+  small {
+    text-align: center;
   }
 `;
 const PayTextBox = styled.div`

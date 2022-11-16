@@ -1,32 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiArrowLeftCircle } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { preOrderDetails } from "../Global/ReduxState";
+import Swal from "sweetalert2";
+import LoadState from "../LoadState/LoadState";
 
 const CheckOut = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const getCart = useSelector((state: any) => state.cart);
+  const [cartItem] = useState<any[]>(getCart);
+  const [loading, setLoading] = useState(false);
+
+  const handleForm = yup.object().shape({
+    name: yup.string().required("Your name is Required!"),
+    email: yup.string().required("Your Email is Required!"),
+    address: yup.string().required("Your Address is Required!"),
+  });
+
+  const {
+    register,
+    // formState: { errors },
+    handleSubmit,
+  } = useForm({ resolver: yupResolver(handleForm) });
+
+  const onSubmmit = handleSubmit(async (value) => {
+    console.log("Success");
+    const { name, email, address } = value;
+    const URL = "https://sam-bag.herokuapp.com/api/order/preOrder";
+    setLoading(true);
+    await axios
+      .post(URL, { email, name, address, orders: cartItem })
+      .then((res) => {
+        console.log(res.data.data);
+        dispatch(preOrderDetails(res.data.data));
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Shippment Sucessfull",
+          showConfirmButton: false,
+          timer: 2500,
+        }).then(() => {
+          navigate("/payment");
+        });
+        setLoading(false);
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: error.response.data.message,
+          text: `Please Check and Fix this ERROR`,
+          icon: "error",
+          showConfirmButton: false,
+          timer: 3500,
+        });
+        setLoading(false);
+      });
+  });
   return (
     <Container>
+      {loading ? <LoadState /> : null}
       <Wrapper>
         <InputPart>
-          <IconTop>
-            <NavLink
-              to="/"
-              style={{
-                textDecoration: "none",
-                color: "#000",
-              }}
-            >
-              <FiArrowLeftCircle />
-            </NavLink>
+          <IconTop
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <FiArrowLeftCircle />
           </IconTop>
           <SignInputHold>
             <SignTitle>CheckOut</SignTitle>
             <SignSubTitle>Please Fill in the details below</SignSubTitle>
-            <InputForm>
-              <InputDiv placeholder="Your Name " />
-              <InputDiv placeholder="Email Address " />
-              <InputDiv placeholder="Home Address" />
-              <InputButton>Proceed To Payment</InputButton>
+            <InputForm onSubmit={onSubmmit}>
+              <InputDiv placeholder="Your Name " {...register("name")} />
+              <InputDiv placeholder="Email Address " {...register("email")} />
+              <InputDiv placeholder="Home Address" {...register("address")} />
+              <InputButton type="submit">Proceed To Payment</InputButton>
             </InputForm>
           </SignInputHold>
         </InputPart>
