@@ -3,22 +3,26 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import CardSkleton from "../CardSkeleton/CardSkleton";
+import { useDispatch, useSelector } from "react-redux";
+import { filterCategory, resetFilter } from "../Global/ReduxState";
 
 const Catalogue: React.FC = () => {
+  const categoryFilter = useSelector((state: any) => state.FILTERCATEGORY);
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [brand, setBrand] = useState<string>("");
+  const [bagType, setBagType] = useState<string>("");
+  const [bagColor, setBagColor] = useState<string>("");
+  const dispatch = useDispatch();
 
   const getProducts = async () => {
     const URL: string = `https://bag-server.vercel.app/api/products`;
-
     await axios.get(URL).then((res) => {
       setProducts(res.data.data);
-      // console.log(res.data.data);
       setIsLoading(false);
     });
   };
 
-  console.log(products);
   // const productData = [
   //   {
   //     id: "1",
@@ -78,9 +82,47 @@ const Catalogue: React.FC = () => {
   //   },
   // ];
 
+  const getBrand = async () => {
+    const URL: string = `https://bag-server.vercel.app/api/products/search/pro?brandName=${brand}`;
+    await axios.get(URL).then((res) => {
+      // console.log(res.data);
+      dispatch(filterCategory(res.data));
+      setIsLoading(false);
+    });
+  };
+  // console.log(brand);
+
+  const getType = async () => {
+    const URL: string = `https://bag-server.vercel.app/api/products/search/pro?bagType=${bagType}`;
+    await axios.get(URL).then((res) => {
+      // console.log(res.data);
+      dispatch(filterCategory(res.data));
+      setIsLoading(false);
+    });
+  };
+
+  const getColor = async () => {
+    const URL: string = `https://bag-server.vercel.app/api/products/search/pro?bagColor=${bagColor}`;
+    await axios.get(URL).then((res) => {
+      // console.log(res.data);
+      dispatch(filterCategory(res.data));
+      setIsLoading(false);
+    });
+  };
+
+  // setTimeout(() => {
+  //   // or wait for 100ms until orders state updated
+  //   console.log("checking Brand: ", brand);
+  //   console.log("checking Type: ", bagType);
+  //   console.log("checking Type: ", bagColor);
+  // }, 100);
+
   useEffect(() => {
     getProducts();
-  }, []);
+    getBrand();
+    getType();
+    getColor();
+  }, [brand, bagType, bagColor]);
   return (
     <Container>
       <Wrapper>
@@ -88,63 +130,126 @@ const Catalogue: React.FC = () => {
           Go through our best <span>CATEGORY</span>{" "}
         </Title>
         <PopCategory>
-          <AllBtn>All</AllBtn>
+          <AllBtn
+            onClick={() => {
+              dispatch(resetFilter());
+              console.log("clicked");
+            }}
+          >
+            All
+          </AllBtn>
           <BrandSel>
             <label>Brand</label>
-            <select>
-              <option>Dior</option>
-              <option>Pedro</option>
-              <option>stradivarus</option>
-              <option>zara</option>
-              <option>charles & Keith</option>
+            <select
+              defaultValue={"DEFAULT"}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
+                setBrand(e.target.value);
+              }}
+            >
+              <option value="DEFAULT" disabled hidden>
+                Bag Brand
+              </option>
+              <option value="dior">dior</option>
+              <option value="pedro">pedro</option>
+              <option value="stradivarius">stradivarus</option>
+              <option value="zara">zara</option>
+              <option value="charles %26 keith">charles & keith</option>
             </select>
           </BrandSel>
           <BrandSel>
             <label>Type</label>
-            <select>
-              <option>Hand Bag</option>
-              <option>Sling Bag</option>
-              <option>Drawstring</option>
-              <option>Wrislet</option>
-              <option>Clutch</option>
+            <select
+              defaultValue={"DEFAULT"}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
+                setBagType(e.target.value);
+              }}
+            >
+              <option value="DEFAULT" disabled hidden>
+                Bag Type
+              </option>
+              <option value="hand bag">Hand Bag</option>
+              <option value="tote">Tote</option>
+              <option value="drawstring">Drawstring</option>
+              <option value="clutch">Clutch</option>
+              <option value="sling">Sling</option>
+              <option value="briefcase">Brief Case</option>
             </select>
           </BrandSel>
           <BrandSel>
             <label>Color</label>
-            <select>
-              <option>Dark Cyan</option>
-              <option>Black</option>
-              <option>Yellow</option>
-              <option>Pink</option>
-              <option>Carton Black</option>
-              <option>Pink</option>
+            <select
+              defaultValue={"DEFAULT"}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
+                setBagColor(e.target.value);
+              }}
+            >
+              <option value="DEFAULT" disabled hidden>
+                Bag Color
+              </option>
+              <option value="chalk">Chalk</option>
+              <option value="black">Black</option>
+              <option value="violet">Violet</option>
+              <option value="brown">Brown</option>
+              <option value="lilac">Lilac</option>
+              <option value="chocolate">Chocolate</option>
+              <option value="dark moss">Dark Moss</option>
+              <option value="multi">Multi</option>
+              <option value="orange">Orange</option>
+              <option value="brick">Brick</option>
+              <option value="skyblue">Skyblue</option>
+              <option value="cyan">Cyan</option>
             </select>
           </BrandSel>
         </PopCategory>
-        <BagsDispHold>
-          {isLoading && <CardSkleton />}
-
-          {products?.map((props) => (
-            <Link
-              key={props._id}
-              to={`/detail/${props._id}`}
-              style={{ textDecoration: "none", color: "#000" }}
-            >
-              <BagCard key={props._id}>
-                <ImgPart>
-                  <LogoImg>
-                    <small> {props.brandName} </small>
-                  </LogoImg>
-                  <BagImage>
-                    <img src={props.avatar} alt="" />
-                  </BagImage>
-                </ImgPart>
-                <ProdName> {props.productName} </ProdName>
-                <ProdPrice>${props.price}</ProdPrice>
-              </BagCard>
-            </Link>
-          ))}
-        </BagsDispHold>
+        {categoryFilter === null || categoryFilter.length === 0 ? (
+          <BagsDispHold>
+            {isLoading && <CardSkleton />}
+            {products?.map((props: any) => (
+              <Link
+                key={props._id}
+                to={`/detail/${props._id}`}
+                style={{ textDecoration: "none", color: "#000" }}
+              >
+                <BagCard key={props._id}>
+                  <ImgPart>
+                    <LogoImg>
+                      <small> {props.brandName} </small>
+                    </LogoImg>
+                    <BagImage>
+                      <img src={props.avatar} alt="" />
+                    </BagImage>
+                  </ImgPart>
+                  <ProdName> {props.productName} </ProdName>
+                  <ProdPrice>${props.price}</ProdPrice>
+                </BagCard>
+              </Link>
+            ))}
+          </BagsDispHold>
+        ) : (
+          <BagsDispHold>
+            {isLoading && <CardSkleton />}
+            {categoryFilter?.map((props: any) => (
+              <Link
+                key={props._id}
+                to={`/detail/${props._id}`}
+                style={{ textDecoration: "none", color: "#000" }}
+              >
+                <BagCard key={props._id}>
+                  <ImgPart>
+                    <LogoImg>
+                      <small> {props.brandName} </small>
+                    </LogoImg>
+                    <BagImage>
+                      <img src={props.avatar} alt="" />
+                    </BagImage>
+                  </ImgPart>
+                  <ProdName> {props.productName} </ProdName>
+                  <ProdPrice>${props.price}</ProdPrice>
+                </BagCard>
+              </Link>
+            ))}
+          </BagsDispHold>
+        )}
       </Wrapper>
     </Container>
   );
