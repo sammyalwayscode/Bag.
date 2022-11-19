@@ -9,6 +9,7 @@ import Header from "./Components/Header/Header";
 import Home from "./Components/Home/Home";
 import ScrollToTop from "./ScrollToTop";
 import { SkeletonTheme } from "react-loading-skeleton";
+import Shop from "./Components/Shop/Shop";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalogue" element={<Catalogue />} />
+          <Route path="/shop" element={<Shop />} />
           <Route path="/detail/:id" element={<DetailPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />

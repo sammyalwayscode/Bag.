@@ -68,7 +68,7 @@ const Popular = () => {
           <AllBtn>All</AllBtn>
           <BrandSel>
             <label>Brand</label>
-            <select>
+            <select disabled>
               <option>Dior</option>
               <option>Pedro</option>
               <option>stradivarus</option>
@@ -78,7 +78,7 @@ const Popular = () => {
           </BrandSel>
           <BrandSel>
             <label>Type</label>
-            <select>
+            <select disabled>
               <option>Hand Bag</option>
               <option>Sling Bag</option>
               <option>Drawstring</option>
@@ -88,7 +88,7 @@ const Popular = () => {
           </BrandSel>
           <BrandSel>
             <label>Color</label>
-            <select>
+            <select disabled>
               <option>Dark Cyan</option>
               <option>Black</option>
               <option>Yellow</option>
@@ -100,7 +100,7 @@ const Popular = () => {
         </PopCategory>
         <BagsDispHold>
           {productData?.map((props) => (
-            <BagCard>
+            <BagCard key={props.id}>
               <ImgPart>
                 <LogoImg>
                   <img src={props.brand} alt="" />

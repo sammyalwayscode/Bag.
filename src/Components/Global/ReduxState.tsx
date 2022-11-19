@@ -6,6 +6,7 @@ type test = {
   QTY: number;
   TOTALPRICE: number;
   PREORDER: {}[] | null;
+  FILTERCATEGORY: {}[] | null;
 };
 
 const initialState: test = {
@@ -13,6 +14,7 @@ const initialState: test = {
   QTY: 0,
   TOTALPRICE: 0,
   PREORDER: null,
+  FILTERCATEGORY: null,
 };
 
 const ReduxState: any = createSlice({
@@ -53,6 +55,12 @@ const ReduxState: any = createSlice({
     resetQty: (state) => {
       state.QTY = 0;
     },
+    filterCategory: (state, { payload }) => {
+      state.FILTERCATEGORY = payload;
+    },
+    resetFilter: (state) => {
+      state.FILTERCATEGORY = null;
+    },
   },
 });
 
@@ -63,6 +71,8 @@ export const {
   clearCart,
   resetPrice,
   resetQty,
+  filterCategory,
+  resetFilter,
 } = ReduxState.actions;
 
 export default ReduxState.reducer;

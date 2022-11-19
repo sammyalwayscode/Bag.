@@ -32,7 +32,13 @@ const Header: React.FC = () => {
               >
                 <span>Catalogue</span>
               </NavLink>
-              <span>Shop</span>
+
+              <NavLink
+                to="/shop"
+                style={{ textDecoration: "none", color: "#000" }}
+              >
+                <span>Shop</span>
+              </NavLink>
             </Navs>
           </LogoNav>
           <IconsHold>
@@ -58,12 +64,15 @@ const Header: React.FC = () => {
             {toggle ? (
               <BsBagXFill size="20px" />
             ) : (
-              <BsBagCheckFill size="20px" />
+              <Hold>
+                <BsBagCheckFill size="20px" />
+                <Num> {getQty} </Num>
+              </Hold>
             )}
           </MobNav>
         </Wrapper>
       </Container>
-      <SideTogg>{toggle ? <SideBar /> : null}</SideTogg>
+      <SideTogg>{toggle ? <SideBar setToggle={setToggle} /> : null}</SideTogg>
     </>
   );
 };
@@ -71,6 +80,9 @@ const Header: React.FC = () => {
 export default Header;
 
 const SideTogg = styled.div``;
+const Hold = styled.div`
+  display: flex;
+`;
 
 const Container = styled.div`
   width: 100%;
