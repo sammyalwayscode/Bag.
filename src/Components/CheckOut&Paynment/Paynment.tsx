@@ -66,7 +66,8 @@ const Paynment = () => {
   return (
     <Container>
       <Wrapper>
-        <h3>Items Bought</h3>
+        <h3>Scroll Down To Make Payment</h3>
+        <h5>Items Bought</h5>
         {getCart?.map((props: any) => (
           <CartCard key={props._id}>
             <CardHold>
