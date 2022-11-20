@@ -19,7 +19,7 @@ const Paynment = () => {
     reference: new Date().getTime().toString(),
     email: getPreOdereds.email,
     amount: parseInt(getTotalPrice.toFixed(2)),
-    publicKey: "pk_test_d632bf4b9aa1e74745eb158cec8034961dc13b18",
+    publicKey: "pk_test_2bbcb1eb3e54d6c60a722e7b3eda839163c83bf0",
   };
 
   const onClose = () => {
