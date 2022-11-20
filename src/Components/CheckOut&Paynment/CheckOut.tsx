@@ -43,7 +43,8 @@ const CheckOut = () => {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Shippment Sucessfull",
+          title: "Great 👏",
+          text: "You Can Now Proceed to Paynment 💵💵💵",
           showConfirmButton: false,
           timer: 2500,
         }).then(() => {
