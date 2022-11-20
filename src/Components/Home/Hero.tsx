@@ -20,6 +20,7 @@ const Hero = () => {
             </Price>
           </BtnText>
         </TextDiv>
+
         <ImageDiv>
           <img src="/image/bagg.png" alt="" />
         </ImageDiv>
